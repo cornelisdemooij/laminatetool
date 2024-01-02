@@ -55,6 +55,24 @@ label.custom-file-upload:hover {
   display: none;
 }
 
+.loc-form {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+.loc-form input {
+  flex-grow: 1;
+  padding: 5px 10px;
+  border-radius: 3px;
+  border: 1px solid black;
+  text-align: center;
+}
+
 #color-gradient-container {
   display: none;
 }
