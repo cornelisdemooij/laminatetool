@@ -72,6 +72,12 @@ label.custom-file-upload:hover {
   border: 1px solid black;
   text-align: center;
 }
+.loc-form input.invalid {
+  border: 1px solid red;
+}
+.loc-form input.invalid:focus-visible {
+  outline-color: red;
+}
 
 #color-gradient-container {
   display: none;

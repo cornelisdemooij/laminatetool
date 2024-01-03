@@ -5,7 +5,17 @@ import GUI from 'lil-gui'
 import './style.css'
 import * as json from './IO/json-files'
 import { dragElement } from './util/drag-element'
+import { validateLoc } from './locParser'
 
+// Laminate Orientation Code:
+const locInput = document.getElementById('loc-input');
+locInput.addEventListener('input', (event) => {
+  const loc = event.target.value;
+  const locIsValid = validateLoc(loc);
+  locInput.classList.toggle('invalid', !locIsValid);
+});
+
+// Colorbar:
 dragElement(document.getElementById("color-gradient-container")); // Make the color gradient element draggable.
 const COLOR_BAR_PRECISION = 3; // Number of significant digits in color bar labels.
 
