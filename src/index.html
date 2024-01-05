@@ -14,8 +14,10 @@
   <input id="file-input" type="file"/>
 
   <form class="loc-form">
-    <label for="loc">Laminate Orientation Code:</label>
-    <input type="text" id="loc-input" name="loc" placeholder="e.g. [0 / 90 / -45 / 45]s">
+    <label for="loc-input">Laminate Orientation Code (LOC):</label>
+    <input type="text" class="loc-input" name="loc-input" placeholder="e.g. [0 / 90 / -45 / 45]s">
+    <label for="loc-expanded">LOC Expanded:</label>
+    <input type="text" class="loc-expanded" name="loc-expanded" readonly>
   </form>
   
   <div id="color-gradient-container">

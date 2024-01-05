@@ -5,15 +5,20 @@ import GUI from 'lil-gui'
 import './style.css'
 import * as json from './IO/json-files'
 import { dragElement } from './util/drag-element'
-import { validateLoc } from './locParser'
+import { validateLoc, parseLoc } from './locParser'
 
 // Laminate Orientation Code:
-const locInput = document.getElementById('loc-input');
-locInput.addEventListener('input', (event) => {
-  const loc = event.target.value;
-  const locIsValid = validateLoc(loc);
-  locInput.classList.toggle('invalid', !locIsValid);
-});
+const locInputs = document.getElementsByClassName('loc-input');
+for (let i = 0; i < locInputs.length; i++) {
+  const locInput = locInputs[i];
+  locInput.addEventListener('input', (event) => {
+    const loc = event.target.value;
+    const locIsValid = validateLoc(loc);
+    locInput.classList.toggle('invalid', !locIsValid);
+
+    parseLoc(loc);
+  });
+}
 
 // Colorbar:
 dragElement(document.getElementById("color-gradient-container")); // Make the color gradient element draggable.
