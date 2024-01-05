@@ -16,7 +16,13 @@ for (let i = 0; i < locInputs.length; i++) {
     const locIsValid = validateLoc(loc);
     locInput.classList.toggle('invalid', !locIsValid);
 
-    parseLoc(loc);
+    const layup = parseLoc(loc);
+
+    const locExpandeds = locInput.parentElement.getElementsByClassName('loc-expanded');
+    for (let j = 0; j < locExpandeds.length; j++) {
+      const locExpanded = locExpandeds[j];
+      locExpanded.value = layup.join(' ');
+    }
   });
 }
 

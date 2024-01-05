@@ -25,7 +25,7 @@ export function parseLoc(loc) {
 
   const layup = tokensToCompleteLayup(tokens);
 
-  console.log(layup);
+  return layup;
 }
 
 function tokensToCompleteLayup(tokens) {
