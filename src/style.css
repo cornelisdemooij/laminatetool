@@ -85,52 +85,6 @@ label.custom-file-upload:hover {
   border: 1px solid grey;
 }
 
-#color-gradient-container {
-  display: none;
-}
-
-#color-gradient-container.visible {
-  position: fixed;
-  top: 30px;
-  left: 30px;
-  height: max-content;
-  width: max-content;
-  display: grid;
-  grid-template: 
-    "title title title"
-    "gradient label-0 ."
-    "gradient label-1 ."
-    "gradient label-2 ."
-    "gradient label-3 ."
-    "gradient label-4 ."
-    "gradient label-5 ."
-    "gradient label-6 ."
-    "gradient label-7 .";
-  gap: 1vh;
-  background-color: transparent;
-}
-#color-gradient-title {
-  grid-area: title;
-}
-#color-gradient {
-  grid-area: gradient;
-  height: 30vh;
-  width: 2vh;
-  background-image: linear-gradient(to top, black, black 1%, navy 1%, blue,aqua,green,yellow,orange,red 99%, white 99%, white);
-  border: grey 3px solid;
-}
-#color-gradient-label {
-  font-size: 2vh;
-}
-#color-gradient-0 { grid-area: label-0; }
-#color-gradient-1 { grid-area: label-1; }
-#color-gradient-2 { grid-area: label-2; }
-#color-gradient-3 { grid-area: label-3; }
-#color-gradient-4 { grid-area: label-4; }
-#color-gradient-5 { grid-area: label-5; }
-#color-gradient-6 { grid-area: label-6; }
-#color-gradient-7 { grid-area: label-7; }
-
 .lil-gui .title:hover, .lil-gui .title:focus-visible {
   color: #ebebeb;
 }

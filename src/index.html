@@ -1,39 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Laminate Tool</title>
-</head>
-<body>
-  <canvas class="webgl"></canvas>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laminate Tool</title>
+  </head>
+  <body>
+    <canvas class="webgl"></canvas>
 
-  <label for="file-input" class="custom-file-upload">
-    Choose file
-  </label>
-  <input id="file-input" type="file"/>
+    <label for="file-input" class="custom-file-upload">
+      Choose file
+    </label>
+    <input id="file-input" type="file"/>
 
-  <form class="loc-form">
-    <label for="loc-input">Laminate Orientation Code (LOC):</label>
-    <input type="text" class="loc-input" name="loc-input" placeholder="e.g. [0 / 90 / -45 / 45]s">
-    <label for="loc-expanded">LOC Expanded:</label>
-    <input type="text" class="loc-expanded" name="loc-expanded" readonly>
-  </form>
-  
-  <div id="color-gradient-container">
-    <div id="color-gradient-title"></div>
-
-    <div id="color-gradient"></div>
-
-    <!-- Just hardcoding 8 steps for name, can be made configurable later -->
-    <div id="color-gradient-0" class="color-gradient-label"></div>
-    <div id="color-gradient-1" class="color-gradient-label"></div>
-    <div id="color-gradient-2" class="color-gradient-label"></div>
-    <div id="color-gradient-3" class="color-gradient-label"></div>
-    <div id="color-gradient-4" class="color-gradient-label"></div>
-    <div id="color-gradient-5" class="color-gradient-label"></div>
-    <div id="color-gradient-6" class="color-gradient-label"></div>
-    <div id="color-gradient-7" class="color-gradient-label"></div>
-  </div>
-</body>
+    <form class="loc-form">
+      <label for="loc-input">Laminate Orientation Code (LOC):</label>
+      <input type="text" class="loc-input" name="loc-input" placeholder="e.g. [0 / 90 / -45 / 45]s">
+      <label for="loc-expanded">LOC Expanded:</label>
+      <input type="text" class="loc-expanded" name="loc-expanded" readonly>
+    </form>
+  </body>
 </html>
