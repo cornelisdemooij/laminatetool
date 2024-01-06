@@ -1,10 +1,13 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import GUI from 'lil-gui'
 
 import './style.css'
-import * as json from './IO/json-files'
+import * as json from './file/json-files'
 import { validateLoc, parseLoc } from './locParser'
+import { createCamera } from './visual/camera'
+import { createControls } from './visual/controls'
+import { createRenderer } from './visual/renderer'
+import { createOrigin } from './mesh/origin'
 
 // Laminate Orientation Code:
 const locInputs = document.getElementsByClassName('loc-input');
@@ -33,9 +36,7 @@ let meshData = {
   color: []
 }
 
-/**
- * File handling
- */
+// File handling
 const fileInput = document.getElementById("file-input")
 fileInput.addEventListener('change', () => {
   const file = fileInput.files[0];
@@ -54,46 +55,12 @@ fileInput.addEventListener('change', () => {
   fileInput.value = '';
 })
 
-/**
- * Debug
- */
+// Debug GUI
 const gui = new GUI({ touchStyles: false });
 gui.close();
 
-/**
- * Cursor
- */
-const cursor = { x: 0, y: 0 }
-window.addEventListener('mousemove', (event) => {
-  cursor.x = event.clientX / sizes.width - 0.5;
-  cursor.y = -(event.clientY / sizes.height - 0.5);
-})
-
-/**
- * Base
- */
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
-
-// Sizes
-const sizes = {
-  width: window.innerWidth,
-  height: window.innerHeight
-}
-
-window.addEventListener('resize', () => {
-  // Update size:
-  sizes.width = window.innerWidth;
-  sizes.height = window.innerHeight;
-
-  // Update camera:
-  camera.aspect = sizes.width / sizes.height;
-  camera.updateProjectionMatrix();
-
-  // Update renderer:
-  renderer.setSize(sizes.width, sizes.height)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-})
 
 window.addEventListener('dblclick', () => {
   const fullscreenElement = document.fullscreenElement
@@ -188,41 +155,10 @@ async function updateMeshGeometry() {
   updateAttribute(wireframeLineGeometry, 'points', wireframeLinePoints, 3);
 }
 
-/**
- * Coordinate system arrows:
- */
-const directions = [
-  new THREE.Vector3( 1, 0, 0 ),
-  new THREE.Vector3( 0, 1, 0 ),
-  new THREE.Vector3( 0, 0, 1 )
-]
-const colors = [ 0xff0000, 0x00ff00, 0x0000ff ];
-const origin = new THREE.Vector3( 0, 0, 0 );
-const length = 2;
-const arrows = directions.map((direction, index) => new THREE.ArrowHelper( direction, origin, length, colors[index] ));
-arrows.forEach(arrow => scene.add(arrow));
+// Coordinate system arrows:
+createOrigin(scene);
 
-// /**
-//  * Text to label coordinate system arrows:
-//  */
-// const loader = new THREE.FontLoader();
-// loader.load('fonts/helvetiker_regular.typeface.json', function ( font ) {
-//   const textGeometry = new THREE.TextGeometry('Hello three.js!', {
-//     size: 80,
-//     height: 5,
-//     curveSegments: 12,
-//     bevelEnabled: true,
-//     bevelThickness: 10,
-//     bevelSize: 8,
-//     bevelOffset: 0,
-//     bevelSegments: 5
-//   });
-//   scene.add(textGeometry)
-// });
-
-/**
- * Lights:
- */
+// Lights:
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.5)
 scene.add(ambientLight)
 
@@ -263,37 +199,30 @@ guiPositionFolder.add(mesh.position, 'y', -3, 3, 0.01).name('Mesh Y')
 guiPositionFolder.add(mesh.position, 'z', -3, 3, 0.01).name('Mesh Z')
 guiPositionFolder.close();
 
-// Camera
-const isometric = true;
-const aspectRatio = sizes.width / sizes.height;
-let camera;
-if (isometric) {
-  const d = 5;
-  camera = new THREE.OrthographicCamera( - d * aspectRatio, d * aspectRatio, d, - d, 1, 1000 );
-  camera.position.set( 2*d, 2*d, 2*d ); // all components equal  
-} else {
-  const camera = new THREE.PerspectiveCamera(
-    60, // Vertical field of view (vFOV) in degrees
-    aspectRatio, // Aspect ratio
-    0.01, // Near
-    1000 // Far
-  )
-  camera.position.z = 3
+// Window size
+const sizes = {
+  width: window.innerWidth,
+  height: window.innerHeight
 }
-camera.lookAt(mesh.position)
-scene.add(camera)
 
-// Controls
-const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true;
+// Camera
+const camera = createCamera(sizes, mesh.position, scene);
+const controls = createControls(camera, canvas);
+const renderer = createRenderer(sizes, canvas)
 
-// Renderer
-const renderer = new THREE.WebGLRenderer({
-  canvas: canvas,
-  antialias: true
+window.addEventListener('resize', () => {
+  // Update size:
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+
+  // Update camera:
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+
+  // Update renderer:
+  renderer.setSize(sizes.width, sizes.height)
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
-renderer.setSize(sizes.width, sizes.height)
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 // Animate
 const clock = new THREE.Clock()

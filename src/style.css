@@ -4,14 +4,14 @@
 }
 
 @font-face {
-  src: url("/static/fonts/Atkinson-Hyperlegible-Regular-102.ttf") format("truetype");
+  src: url("/fonts/Atkinson-Hyperlegible-Regular-102.ttf") format("truetype");
   font-family: "Atkinson Hyperlegible";
   font-weight: normal;
   font-style: normal;
   font-display: fallback;
 }
 @font-face {
-  src: url("/static/fonts/Atkinson-Hyperlegible-Bold-102.ttf") format("truetype");
+  src: url("/fonts/Atkinson-Hyperlegible-Bold-102.ttf") format("truetype");
   font-family: "Atkinson Hyperlegible";
   font-weight: bold;
   font-style: normal;
