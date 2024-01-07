@@ -120,7 +120,6 @@ export function layupToMeshData(layup) {
         points.push(xyz);
       }
       const normal = surfaceNormal(points[0], points[1], points[2]);
-      console.log(normal)
       for (let iPoint = 0; iPoint < points.length; iPoint++) {
         meshData.normal.push(...normal);
       }
@@ -141,5 +140,5 @@ export function layupToMeshData(layup) {
 }
 
 function iNode(ix, iy, iz, nx, ny, nz) {
-  return ix * (ny + 1) * (nz + 1) + iy * (nz + 1) + iz;
+  return iz * (nx + 1) * (ny + 1) + ix * (ny + 1) + iy;
 }

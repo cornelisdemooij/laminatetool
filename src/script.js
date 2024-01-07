@@ -96,8 +96,8 @@ scene.fog = new THREE.Fog(0xFFFFFF, 10, 100);
 // Object (for structure)
 const material = new THREE.MeshStandardMaterial()
 material.vertexColors = true
-material.metalness = 0.95
-material.roughness = 0.4
+material.metalness = 0.75
+material.roughness = 0.175
 material.flatShading = false
 material.wireframe = false
 const guiMaterialFolder = gui.addFolder('Material')
