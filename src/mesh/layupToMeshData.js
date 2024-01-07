@@ -104,6 +104,9 @@ export function layupToMeshData(layup) {
         const nodeNumber = surface.nodeNumbers[indices[iIndex]];
         const xyz = meshData.nodes[nodeNumber].xyz;
         meshData.position.push(xyz[0], xyz[1], xyz[2]);
+
+        // Neutral color:
+        meshData.color.push(0.5, 0.5, 0.5);
       }
     }
 
@@ -114,9 +117,10 @@ export function layupToMeshData(layup) {
       for (let iIndex = 0; iIndex < indices.length; iIndex++) {
         const nodeNumber = surface.nodeNumbers[indices[iIndex]];
         const xyz = meshData.nodes[nodeNumber].xyz;
-        points.push(xyz[0], xyz[1], xyz[2]);
+        points.push(xyz);
       }
       const normal = surfaceNormal(points[0], points[1], points[2]);
+      console.log(normal)
       for (let iPoint = 0; iPoint < points.length; iPoint++) {
         meshData.normal.push(...normal);
       }

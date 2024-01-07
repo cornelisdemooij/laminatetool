@@ -96,8 +96,8 @@ scene.fog = new THREE.Fog(0xFFFFFF, 10, 100);
 // Object (for structure)
 const material = new THREE.MeshStandardMaterial()
 material.vertexColors = true
-material.metalness = 0.3
-material.roughness = 0.2
+material.metalness = 0.95
+material.roughness = 0.4
 material.flatShading = false
 material.wireframe = false
 const guiMaterialFolder = gui.addFolder('Material')
@@ -169,19 +169,19 @@ createOrigin(scene);
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.5)
 scene.add(ambientLight)
 
-const pointLight1 = new THREE.PointLight(0xffffff, 0.7)
+const pointLight1 = new THREE.PointLight(0xff0000, 0.7)
 pointLight1.position.x = 2
 pointLight1.position.y = 3
 pointLight1.position.z = 4
 scene.add(pointLight1)
-pointLight1.visible = false;
+pointLight1.visible = true;
 
-const pointLight2 = new THREE.PointLight(0xffffff, 0.7)
+const pointLight2 = new THREE.PointLight(0x0000ff, 0.7)
 pointLight2.position.x = -2
 pointLight2.position.y = -3
 pointLight2.position.z = -4
 scene.add(pointLight2)
-pointLight2.visible = false;
+pointLight2.visible = true;
 
 const lightControls = {
   ambientLight: () => { ambientLight.visible = !ambientLight.visible; },
