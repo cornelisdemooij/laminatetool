@@ -1,3 +1,5 @@
+import { surfaceNormal } from "../util/vector";
+
 export function layupToMeshData(layup) {
   console.log(layup);
 
@@ -40,14 +42,14 @@ export function layupToMeshData(layup) {
     for (let iLength = 0; iLength < nLength; iLength++) {
       for (let iWidth = 0; iWidth < nWidth; iWidth++) {
         const nodeNumbers = [
-          iNode(iLength, iWidth, iPly),
-          iNode(iLength + 1, iWidth, iPly),
-          iNode(iLength + 1, iWidth + 1, iPly),
-          iNode(iLength, iWidth + 1, iPly),
-          iNode(iLength, iWidth, iPly + 1),
-          iNode(iLength + 1, iWidth, iPly + 1),
-          iNode(iLength + 1, iWidth + 1, iPly + 1),
-          iNode(iLength, iWidth + 1, iPly + 1)
+          iNode(iLength,     iWidth,     iPly,     nLength, nWidth, layup.length),
+          iNode(iLength + 1, iWidth,     iPly,     nLength, nWidth, layup.length),
+          iNode(iLength + 1, iWidth + 1, iPly,     nLength, nWidth, layup.length),
+          iNode(iLength,     iWidth + 1, iPly,     nLength, nWidth, layup.length),
+          iNode(iLength,     iWidth,     iPly + 1, nLength, nWidth, layup.length),
+          iNode(iLength + 1, iWidth,     iPly + 1, nLength, nWidth, layup.length),
+          iNode(iLength + 1, iWidth + 1, iPly + 1, nLength, nWidth, layup.length),
+          iNode(iLength,     iWidth + 1, iPly + 1, nLength, nWidth, layup.length)
         ];
         meshData.elements.push({
           materialNumber: 0,
@@ -75,7 +77,8 @@ export function layupToMeshData(layup) {
           nodeNumbers[localNodeIndices[iSurface][1]],
           nodeNumbers[localNodeIndices[iSurface][2]],
           nodeNumbers[localNodeIndices[iSurface][3]]
-        ]
+        ],
+        elementNumber: iElement
       });
     }
   }
@@ -86,30 +89,53 @@ export function layupToMeshData(layup) {
     color: [0.5, 0.5, 0.5]
   });
 
-  // The layers are stacked together in the z direction:
-  for (let iPly = 0; iPly < layup.length + 1; iPly++) {
-    // For each ply we create a cube, so 6 surfaces:
-    for (let iSurface = 0; iSurface < 6; iSurface++) {
-      meshData.surfaces.push({
-        materialNumber: iPly,
-        nodeNumbers: []
-      });
+  // Convert the surfaces to triangles:
+  const surfacesTriangles = [ // Contains indices per face (polygon, triangle etc)
+    [ 0, 1, 3 ], // Triangle 1
+    [ 3, 1, 2 ]  // Triangle 2
+  ]
+  for (let iSurface = 0; iSurface < meshData.surfaces.length; iSurface++) {
+    const surface = meshData.surfaces[iSurface];
+
+    // Positions:
+    for (let iTriangle = 0; iTriangle < surfacesTriangles.length; iTriangle++) {
+      const indices = surfacesTriangles[iTriangle];
+      for (let iIndex = 0; iIndex < indices.length; iIndex++) {
+        const nodeNumber = surface.nodeNumbers[indices[iIndex]];
+        const xyz = meshData.nodes[nodeNumber].xyz;
+        meshData.position.push(xyz[0], xyz[1], xyz[2]);
+      }
     }
 
-    for (let iLength = 0; iLength < 2; iLength++) {
-      for (let iWidth = 0; iWidth < 2; iWidth++) {
-        meshData.position.push(
-          iLength * length / nLength, 
-          iWidth * width / nWidth, 
-          iPly * plyThickness
-        );
+    // Normal:
+    for (let iTriangle = 0; iTriangle < surfacesTriangles.length; iTriangle++) {
+      const indices = surfacesTriangles[iTriangle];
+      const points = [];
+      for (let iIndex = 0; iIndex < indices.length; iIndex++) {
+        const nodeNumber = surface.nodeNumbers[indices[iIndex]];
+        const xyz = meshData.nodes[nodeNumber].xyz;
+        points.push(xyz[0], xyz[1], xyz[2]);
       }
-    } 
+      const normal = surfaceNormal(points[0], points[1], points[2]);
+      for (let iPoint = 0; iPoint < points.length; iPoint++) {
+        meshData.normal.push(...normal);
+      }
+    }
+
+    // UV:
+    meshData.uv.push(
+      0, 0,
+      1, 0,
+      0, 1,
+      0, 1,
+      1, 0,
+      1, 1
+    )
   }
 
   return meshData;
 }
 
-function iNode(ix, iy, iz) {
+function iNode(ix, iy, iz, nx, ny, nz) {
   return ix * (ny + 1) * (nz + 1) + iy * (nz + 1) + iz;
 }
