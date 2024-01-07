@@ -8,6 +8,15 @@ import { createCamera } from './visual/camera'
 import { createControls } from './visual/controls'
 import { createRenderer } from './visual/renderer'
 import { createOrigin } from './mesh/origin'
+import { layupToMeshData } from './mesh/layupToMeshData'
+
+// Mesh:
+let meshData = {
+  position: [],
+  normal: [],
+  uv: [],
+  color: []
+}
 
 // Laminate Orientation Code:
 const locInputs = document.getElementsByClassName('loc-input');
@@ -18,22 +27,20 @@ for (let i = 0; i < locInputs.length; i++) {
     const locIsValid = validateLoc(loc);
     locInput.classList.toggle('invalid', !locIsValid);
 
-    const layup = parseLoc(loc);
+    if (locIsValid) {
+      const layup = parseLoc(loc);
 
-    const locExpandeds = locInput.parentElement.getElementsByClassName('loc-expanded');
-    for (let j = 0; j < locExpandeds.length; j++) {
-      const locExpanded = locExpandeds[j];
-      locExpanded.value = layup.join(' ');
+      const locExpandeds = locInput.parentElement.getElementsByClassName('loc-expanded');
+      for (let j = 0; j < locExpandeds.length; j++) {
+        const locExpanded = locExpandeds[j];
+        locExpanded.value = layup.join(' ');
+      }
+
+      meshData = layupToMeshData(layup);
+      console.dir(meshData);
+      updateMeshGeometry()
     }
   });
-}
-
-// Mesh:
-let meshData = {
-  position: [],
-  normal: [],
-  uv: [],
-  color: []
 }
 
 // File handling
