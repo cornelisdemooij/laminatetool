@@ -98,13 +98,11 @@ const material = new THREE.MeshStandardMaterial()
 material.vertexColors = true
 material.metalness = 0.75
 material.roughness = 0.175
-material.flatShading = false
 material.wireframe = false
 const guiMaterialFolder = gui.addFolder('Material')
-guiMaterialFolder.add(material, 'metalness').min(0).max(1)
-guiMaterialFolder.add(material, 'roughness').min(0).max(1)
-guiMaterialFolder.add(material, 'flatShading').name('Flat Shading')
-guiMaterialFolder.add(material, 'wireframe').name('Wire Frame')
+guiMaterialFolder.add(material, 'metalness').min(0).max(1).name('Metalness')
+guiMaterialFolder.add(material, 'roughness').min(0).max(1).name('Roughness')
+guiMaterialFolder.add(material, 'wireframe').name('Wireframe')
 guiMaterialFolder.close();
 
 material.side = THREE.FrontSide
@@ -159,7 +157,9 @@ async function updateMeshGeometry() {
       }
     }
   }
-  updateAttribute(wireframeLineGeometry, 'points', wireframeLinePoints, 3);
+  wireframeLineSegments.geometry.dispose();
+  const wireframeLineGeometry = new THREE.BufferGeometry().setFromPoints( wireframeLinePoints );
+  wireframeLineSegments.geometry = wireframeLineGeometry;
 }
 
 // Coordinate system arrows:

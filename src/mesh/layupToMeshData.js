@@ -3,7 +3,7 @@ import { surfaceNormal } from "../util/vector";
 export function layupToMeshData(layup) {
   console.log(layup);
 
-  const plyThickness = 0.1;
+  const plyThickness = 0.2;
   const length = 1.0;
   const width = 1.0;
 
@@ -11,26 +11,26 @@ export function layupToMeshData(layup) {
   const nWidth = 1; // Number of elements in the width direction (y)
 
   const meshData = {
-    position: [],
-    normal: [],
-    uv: [],
-    color: [],
-
     nodes: [],
     elements: [],
     surfaces: [],
-    materials: []
+    materials: [], 
+
+    position: [],
+    normal: [],
+    uv: [],
+    color: []
   };
 
   // Create some helper arrays to make it easier to create rendered mesh:
   for (let iPly = 0; iPly < layup.length + 1; iPly++) {
     for (let iLength = 0; iLength < nLength + 1; iLength++) {
-      for (let iWidth = 0; iWidth < nLength + 1; iWidth++) {
+      for (let iWidth = 0; iWidth < nWidth + 1; iWidth++) {
         meshData.nodes.push({
           xyz: [
-            iLength * length / nLength, 
             iWidth * width / nWidth, 
-            iPly * plyThickness
+            iPly * plyThickness,
+            iLength * length / nLength
           ]
         });
       }
@@ -42,14 +42,14 @@ export function layupToMeshData(layup) {
     for (let iLength = 0; iLength < nLength; iLength++) {
       for (let iWidth = 0; iWidth < nWidth; iWidth++) {
         const nodeNumbers = [
-          iNode(iLength,     iWidth,     iPly,     nLength, nWidth, layup.length),
-          iNode(iLength + 1, iWidth,     iPly,     nLength, nWidth, layup.length),
-          iNode(iLength + 1, iWidth + 1, iPly,     nLength, nWidth, layup.length),
-          iNode(iLength,     iWidth + 1, iPly,     nLength, nWidth, layup.length),
-          iNode(iLength,     iWidth,     iPly + 1, nLength, nWidth, layup.length),
-          iNode(iLength + 1, iWidth,     iPly + 1, nLength, nWidth, layup.length),
-          iNode(iLength + 1, iWidth + 1, iPly + 1, nLength, nWidth, layup.length),
-          iNode(iLength,     iWidth + 1, iPly + 1, nLength, nWidth, layup.length)
+          iNode(iWidth,     iPly,     iLength,     nWidth, layup.length, nLength),
+          iNode(iWidth + 1, iPly,     iLength,     nWidth, layup.length, nLength),
+          iNode(iWidth + 1, iPly,     iLength + 1, nWidth, layup.length, nLength),
+          iNode(iWidth,     iPly,     iLength + 1, nWidth, layup.length, nLength),
+          iNode(iWidth,     iPly + 1, iLength,     nWidth, layup.length, nLength),
+          iNode(iWidth + 1, iPly + 1, iLength,     nWidth, layup.length, nLength),
+          iNode(iWidth + 1, iPly + 1, iLength + 1, nWidth, layup.length, nLength),
+          iNode(iWidth,     iPly + 1, iLength + 1, nWidth, layup.length, nLength)
         ];
         meshData.elements.push({
           materialNumber: 0,
@@ -61,12 +61,12 @@ export function layupToMeshData(layup) {
 
   // Create the surfaces:
   const localNodeIndices = [
-    [0, 3, 2, 1], // Bottom
-    [0, 4, 7, 3], // Front
-    [1, 2, 6, 5], // Back
-    [0, 1, 5, 4], // Left
-    [2, 3, 7, 6], // Right
-    [4, 5, 6, 7]  // Top
+    [0, 1, 2, 3], // Bottom
+    [0, 3, 7, 4], // Front
+    [1, 5, 6, 2], // Back
+    [0, 4, 5, 1], // Left
+    [2, 6, 7, 3], // Right
+    [4, 7, 6, 5]  // Top
   ];
   for (let iElement = 0; iElement < meshData.elements.length; iElement++) {
     const nodeNumbers = meshData.elements[iElement].nodeNumbers;
@@ -140,5 +140,5 @@ export function layupToMeshData(layup) {
 }
 
 function iNode(ix, iy, iz, nx, ny, nz) {
-  return iz * (nx + 1) * (ny + 1) + ix * (ny + 1) + iy;
+  return iy * (nz + 1) * (nx + 1) + iz * (nx + 1) + ix;
 }
